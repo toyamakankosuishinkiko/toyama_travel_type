@@ -17,7 +17,7 @@ st.set_page_config(
 KITOKITO_IMG = "https://www.genspark.ai/api/files/s/IoU5naSJ"
 
 # Google Apps Script Web App URL（蓄積用）
-GAS_URL = ""  # デプロイ後にGASのURLをここに貼る
+GAS_URL = "https://script.google.com/macros/s/AKfycbxBoJZRbciwDbi2OY4FhW1vM3To6edgaxEDkK-RaXPQrrCf8sEX_YjvDZKgNP_OuCx-/exec"  
 
 # ============================================================
 # カスタムCSS
