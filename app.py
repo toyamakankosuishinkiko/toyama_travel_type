@@ -748,7 +748,9 @@ def page_quiz():
             st.session_state.q_index -= 1
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
-
+# ============================================================
+# ページ: 結果
+# ============================================================
 def page_result():
     answers = st.session_state.answers
     scores = calc_scores(answers)
