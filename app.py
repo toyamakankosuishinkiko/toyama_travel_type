@@ -592,6 +592,9 @@ def page_top():
 # ============================================================
 # ページ: 質問
 # ============================================================
+# ============================================================
+# ページ: 質問（修正版）
+# ============================================================
 def page_quiz():
     idx = st.session_state.q_index
     q = QUESTIONS[idx]
@@ -618,10 +621,8 @@ def page_quiz():
     # 現在の回答値
     current_val = st.session_state.answers[idx]
 
-    # 5段階の丸ボタンをHTMLで描画
-    # 各ボタンのサイズ: 両端が大きい、中央が小さい
+    # 5段階の丸ボタンをHTMLで表示（視覚用）
     sizes = [44, 36, 28, 36, 44]
-    colors_selected = ["#0091DA", "#0091DA", "#0091DA", "#0091DA", "#0091DA"]
 
     circles_html = ""
     for i in range(5):
@@ -631,17 +632,16 @@ def page_quiz():
         if is_selected:
             circle_style = (
                 f"width:{size}px; height:{size}px; border-radius:50%; "
-                f"background:{colors_selected[i]}; border:3px solid {colors_selected[i]}; "
-                f"cursor:pointer; display:flex; align-items:center; justify-content:center; "
+                f"background:#0091DA; border:3px solid #0091DA; "
+                f"display:flex; align-items:center; justify-content:center; "
                 f"transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,145,218,0.4);"
             )
-            # 内側の白丸
             inner_dot = f'<div style="width:{int(size*0.35)}px; height:{int(size*0.35)}px; border-radius:50%; background:white;"></div>'
         else:
             circle_style = (
                 f"width:{size}px; height:{size}px; border-radius:50%; "
                 f"background:white; border:2.5px solid #CCC; "
-                f"cursor:pointer; display:flex; align-items:center; justify-content:center; "
+                f"display:flex; align-items:center; justify-content:center; "
                 f"transition: all 0.2s ease;"
             )
             inner_dot = ""
@@ -655,45 +655,56 @@ def page_quiz():
     </div>
     """, unsafe_allow_html=True)
 
-    # Streamlit のボタンで選択値を設定（5つのカラムで配置）
-    left_label, c1, c2, c3, c4, c5, right_label = st.columns([2, 1, 1, 1, 1, 1, 2])
-    with left_label:
-        st.write("")
+    # 透明ボタンを丸の上に重ねてクリック判定（見えないが押せるボタン）
+    st.markdown("""
+    <style>
+    .invisible-btn-row .stButton > button {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: transparent !important;
+        padding: 0.8rem 0 !important;
+        min-height: 44px;
+        width: 100%;
+    }
+    .invisible-btn-row .stButton > button:hover {
+        background: rgba(0,145,218,0.05) !important;
+        border-radius: 50%;
+    }
+    .invisible-btn-row .stButton > button:focus {
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<div class="invisible-btn-row">', unsafe_allow_html=True)
+    pad_l, c1, c2, c3, c4, c5, pad_r = st.columns([2, 1, 1, 1, 1, 1, 2])
     with c1:
-        if st.button("●", key=f"opt_{idx}_1", help=q["left"]):
+        if st.button("　", key=f"sel_{idx}_1"):
             st.session_state.answers[idx] = 1
             st.rerun()
     with c2:
-        if st.button("●", key=f"opt_{idx}_2", help="やや" + q["left"].split("・")[0][:4]):
+        if st.button("　", key=f"sel_{idx}_2"):
             st.session_state.answers[idx] = 2
             st.rerun()
     with c3:
-        if st.button("●", key=f"opt_{idx}_3", help="どちらともいえない"):
+        if st.button("　", key=f"sel_{idx}_3"):
             st.session_state.answers[idx] = 3
             st.rerun()
     with c4:
-        if st.button("●", key=f"opt_{idx}_4", help="やや" + q["right"].split("・")[0][:4]):
+        if st.button("　", key=f"sel_{idx}_4"):
             st.session_state.answers[idx] = 4
             st.rerun()
     with c5:
-        if st.button("●", key=f"opt_{idx}_5", help=q["right"]):
+        if st.button("　", key=f"sel_{idx}_5"):
             st.session_state.answers[idx] = 5
             st.rerun()
-    with right_label:
-        st.write("")
-
-    # 選択状態の表示
-    if current_val is not None:
-        labels_map = {1: q["left"], 2: f"やや {q['left']}", 3: "どちらともいえない", 4: f"やや {q['right']}", 5: q["right"]}
-        st.markdown(f"""
-        <div style="text-align:center; margin:0.5rem 0; padding:0.5rem; background:#E8F4FD; border-radius:8px;">
-            <span style="color:#0091DA; font-weight:700; font-size:0.9rem;">選択中: {labels_map[current_val]}</span>
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("<div style='height:0.5rem'></div>", unsafe_allow_html=True)
 
-    # 「次へ」ボタン（上部に配置、青色塗りつぶし）
+    # 「次へ」ボタン（回答済みの場合のみ表示）
     if current_val is not None:
         if idx < 19:
             if st.button("次へ →", key="next_btn", type="primary", use_container_width=True):
@@ -706,18 +717,17 @@ def page_quiz():
     else:
         st.markdown("""
         <div style="text-align:center; color:#999; font-size:0.85rem; margin:0.5rem 0;">
-            ↑ 上の丸ボタンをクリックして回答してください
+            ↑ 丸ボタンをタッチして回答してください
         </div>
         """, unsafe_allow_html=True)
 
-    # 「戻る」ボタン（下部、グレー）
+    # 「戻る」ボタン（2問目以降のみ表示、グレー）
     if idx > 0:
         st.markdown("<div class='back-btn'>", unsafe_allow_html=True)
         if st.button("← 戻る", key="back_btn", use_container_width=True):
             st.session_state.q_index -= 1
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
-
 # ============================================================
 # ページ: 結果
 # ============================================================
