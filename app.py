@@ -20,6 +20,74 @@ GAS_URL = ""  # GASデプロイ後にURLを貼り付け
 # CSS
 # ============================================================
 st.markdown("""
+/* ===== ラジオボタンを丸ボタン化 ===== */
+div.quiz-radio div[data-testid="stRadio"] > label {
+    display: none !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    border: 2.5px solid #CCC !important;
+    background: white !important;
+    color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    min-height: 0 !important;
+}
+/* 各丸のサイズ（1番目と5番目が大、中央が小） */
+div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(1),
+div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(5) {
+    width: 44px !important; height: 44px !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(2),
+div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(4) {
+    width: 36px !important; height: 36px !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(3) {
+    width: 28px !important; height: 28px !important;
+}
+/* 選択済みの丸 */
+div.quiz-radio div[data-testid="stRadio"] > div > label[data-checked="true"],
+div.quiz-radio div[data-testid="stRadio"] > div > label:has(input:checked) {
+    background: #0091DA !important;
+    border-color: #0091DA !important;
+    box-shadow: 0 2px 8px rgba(0,145,218,0.4) !important;
+}
+/* ラジオ内部の丸ドットを非表示 */
+div.quiz-radio div[data-testid="stRadio"] > div > label > div {
+    display: none !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label > div:first-child {
+    display: none !important;
+}
+/* ラジオのテキスト非表示 */
+div.quiz-radio div[data-testid="stRadio"] > div > label p,
+div.quiz-radio div[data-testid="stRadio"] > div > label span {
+    display: none !important;
+}
+
+/* ===== 次へボタン青色化 ===== */
+button[kind="primary"], 
+button[data-testid="baseButton-primary"] {
+    background: linear-gradient(135deg, #0091DA, #00B4D8) !important;
+    border: none !important;
+    color: white !important;
+}
+button[kind="primary"]:hover,
+button[data-testid="baseButton-primary"]:hover {
+    background: linear-gradient(135deg, #007BBD, #0091DA) !important;
+}
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
 
@@ -595,6 +663,9 @@ def page_top():
 # ============================================================
 # ページ: 質問（修正版）
 # ============================================================
+# ============================================================
+# ページ: 質問（修正版v2）
+# ============================================================
 def page_quiz():
     idx = st.session_state.q_index
     q = QUESTIONS[idx]
@@ -618,89 +689,38 @@ def page_quiz():
     </div>
     """, unsafe_allow_html=True)
 
-    # 現在の回答値
-    current_val = st.session_state.answers[idx]
-
-    # 5段階の丸ボタンをHTMLで表示（視覚用）
-    sizes = [44, 36, 28, 36, 44]
-
-    circles_html = ""
-    for i in range(5):
-        val = i + 1
-        size = sizes[i]
-        is_selected = (current_val == val)
-        if is_selected:
-            circle_style = (
-                f"width:{size}px; height:{size}px; border-radius:50%; "
-                f"background:#0091DA; border:3px solid #0091DA; "
-                f"display:flex; align-items:center; justify-content:center; "
-                f"transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,145,218,0.4);"
-            )
-            inner_dot = f'<div style="width:{int(size*0.35)}px; height:{int(size*0.35)}px; border-radius:50%; background:white;"></div>'
-        else:
-            circle_style = (
-                f"width:{size}px; height:{size}px; border-radius:50%; "
-                f"background:white; border:2.5px solid #CCC; "
-                f"display:flex; align-items:center; justify-content:center; "
-                f"transition: all 0.2s ease;"
-            )
-            inner_dot = ""
-        circles_html += f'<div style="{circle_style}">{inner_dot}</div>'
-
+    # 左右ラベル
     st.markdown(f"""
-    <div class="scale-row">
-        <div class="scale-label-left">{q["left"]}</div>
-        {circles_html}
-        <div class="scale-label-right">{q["right"]}</div>
+    <div style="display:flex; justify-content:space-between; padding:0 1rem; margin-bottom:-0.5rem;">
+        <span style="font-size:0.78rem; color:#888;">{q["left"]}</span>
+        <span style="font-size:0.78rem; color:#888;">{q["right"]}</span>
     </div>
     """, unsafe_allow_html=True)
 
-    # 透明ボタンを丸の上に重ねてクリック判定（見えないが押せるボタン）
-    st.markdown("""
-    <style>
-    .invisible-btn-row .stButton > button {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        color: transparent !important;
-        padding: 0.8rem 0 !important;
-        min-height: 44px;
-        width: 100%;
-    }
-    .invisible-btn-row .stButton > button:hover {
-        background: rgba(0,145,218,0.05) !important;
-        border-radius: 50%;
-    }
-    .invisible-btn-row .stButton > button:focus {
-        background: transparent !important;
-        box-shadow: none !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    # ラジオボタン（CSSで丸ボタン化される）
+    options = ["1", "2", "3", "4", "5"]
+    current_val = st.session_state.answers[idx]
+    default_index = (current_val - 1) if current_val is not None else None
 
-    st.markdown('<div class="invisible-btn-row">', unsafe_allow_html=True)
-    pad_l, c1, c2, c3, c4, c5, pad_r = st.columns([2, 1, 1, 1, 1, 1, 2])
-    with c1:
-        if st.button("　", key=f"sel_{idx}_1"):
-            st.session_state.answers[idx] = 1
-            st.rerun()
-    with c2:
-        if st.button("　", key=f"sel_{idx}_2"):
-            st.session_state.answers[idx] = 2
-            st.rerun()
-    with c3:
-        if st.button("　", key=f"sel_{idx}_3"):
-            st.session_state.answers[idx] = 3
-            st.rerun()
-    with c4:
-        if st.button("　", key=f"sel_{idx}_4"):
-            st.session_state.answers[idx] = 4
-            st.rerun()
-    with c5:
-        if st.button("　", key=f"sel_{idx}_5"):
-            st.session_state.answers[idx] = 5
-            st.rerun()
+    st.markdown('<div class="quiz-radio">', unsafe_allow_html=True)
+    if default_index is not None:
+        selected = st.radio(
+            "select", options, index=default_index,
+            horizontal=True, label_visibility="collapsed",
+            key=f"radio_{idx}"
+        )
+    else:
+        selected = st.radio(
+            "select", options, index=None,
+            horizontal=True, label_visibility="collapsed",
+            key=f"radio_{idx}"
+        )
     st.markdown('</div>', unsafe_allow_html=True)
+
+    # 回答をセッションに保存
+    if selected is not None:
+        st.session_state.answers[idx] = int(selected)
+        current_val = int(selected)
 
     st.markdown("<div style='height:0.5rem'></div>", unsafe_allow_html=True)
 
@@ -717,20 +737,18 @@ def page_quiz():
     else:
         st.markdown("""
         <div style="text-align:center; color:#999; font-size:0.85rem; margin:0.5rem 0;">
-            ↑ 丸ボタンをタッチして回答してください
+            丸ボタンをタッチして回答してください
         </div>
         """, unsafe_allow_html=True)
 
-    # 「戻る」ボタン（2問目以降のみ表示、グレー）
+    # 「戻る」ボタン（2問目以降、グレー）
     if idx > 0:
         st.markdown("<div class='back-btn'>", unsafe_allow_html=True)
         if st.button("← 戻る", key="back_btn", use_container_width=True):
             st.session_state.q_index -= 1
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
-# ============================================================
-# ページ: 結果
-# ============================================================
+
 def page_result():
     answers = st.session_state.answers
     scores = calc_scores(answers)
