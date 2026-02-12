@@ -20,74 +20,6 @@ GAS_URL = ""  # GASデプロイ後にURLを貼り付け
 # CSS
 # ============================================================
 st.markdown("""
-/* ===== ラジオボタンを丸ボタン化 ===== */
-div.quiz-radio div[data-testid="stRadio"] > label {
-    display: none !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 12px !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 50% !important;
-    border: 2.5px solid #CCC !important;
-    background: white !important;
-    color: transparent !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-    min-height: 0 !important;
-}
-/* 各丸のサイズ（1番目と5番目が大、中央が小） */
-div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(1),
-div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(5) {
-    width: 44px !important; height: 44px !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(2),
-div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(4) {
-    width: 36px !important; height: 36px !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(3) {
-    width: 28px !important; height: 28px !important;
-}
-/* 選択済みの丸 */
-div.quiz-radio div[data-testid="stRadio"] > div > label[data-checked="true"],
-div.quiz-radio div[data-testid="stRadio"] > div > label:has(input:checked) {
-    background: #0091DA !important;
-    border-color: #0091DA !important;
-    box-shadow: 0 2px 8px rgba(0,145,218,0.4) !important;
-}
-/* ラジオ内部の丸ドットを非表示 */
-div.quiz-radio div[data-testid="stRadio"] > div > label > div {
-    display: none !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label > div:first-child {
-    display: none !important;
-}
-/* ラジオのテキスト非表示 */
-div.quiz-radio div[data-testid="stRadio"] > div > label p,
-div.quiz-radio div[data-testid="stRadio"] > div > label span {
-    display: none !important;
-}
-
-/* ===== 次へボタン青色化 ===== */
-button[kind="primary"], 
-button[data-testid="baseButton-primary"] {
-    background: linear-gradient(135deg, #0091DA, #00B4D8) !important;
-    border: none !important;
-    color: white !important;
-}
-button[kind="primary"]:hover,
-button[data-testid="baseButton-primary"]:hover {
-    background: linear-gradient(135deg, #007BBD, #0091DA) !important;
-}
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
 
@@ -133,17 +65,11 @@ footer { visibility: hidden; }
     margin: 1rem 0;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
-.question-number {
-    font-size: 0.85rem;
-    color: #0091DA;
-    font-weight: 700;
-    margin-bottom: 0.3rem;
-}
 .question-text {
     font-size: 1.15rem;
     font-weight: 700;
     color: #333;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0;
     line-height: 1.6;
 }
 
@@ -162,44 +88,76 @@ footer { visibility: hidden; }
     transition: width 0.4s ease;
 }
 
-/* ===== 5段階丸ボタン ===== */
-.scale-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin: 1rem 0 0.8rem 0;
-}
-.scale-label-left, .scale-label-right {
-    font-size: 0.78rem;
-    color: #888;
-    min-width: 80px;
-    text-align: center;
-    line-height: 1.3;
-}
-.scale-label-left { text-align: right; }
-.scale-label-right { text-align: left; }
-
-/* Streamlit のラジオボタン自体を非表示 */
-div[data-testid="stRadio"] > div {
+/* ===== ラジオボタンを丸ボタン化 ===== */
+div.quiz-radio div[data-testid="stRadio"] > label {
     display: none !important;
 }
-div[data-testid="stRadio"] > label {
+div.quiz-radio div[data-testid="stRadio"] > div {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    border: 2.5px solid #CCC !important;
+    background: white !important;
+    color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    min-height: 0 !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(1),
+div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(5) {
+    width: 44px !important;
+    height: 44px !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(2),
+div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(4) {
+    width: 36px !important;
+    height: 36px !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(3) {
+    width: 28px !important;
+    height: 28px !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label[data-checked="true"],
+div.quiz-radio div[data-testid="stRadio"] > div > label:has(input:checked) {
+    background: #0091DA !important;
+    border-color: #0091DA !important;
+    box-shadow: 0 2px 8px rgba(0,145,218,0.4) !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label > div {
+    display: none !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label > div:first-child {
+    display: none !important;
+}
+div.quiz-radio div[data-testid="stRadio"] > div > label p,
+div.quiz-radio div[data-testid="stRadio"] > div > label span {
     display: none !important;
 }
 
-/* ===== 次へ・戻るボタン ===== */
-/* 「次へ」ボタン：青背景・白文字・全体塗りつぶし */
-div.stButton > button[kind="primary"],
-div.stButton > button:first-child {
-    width: 100%;
-    padding: 0.8rem 2rem;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
+/* ===== 次へボタン青色化 ===== */
+button[kind="primary"],
+button[data-testid="baseButton-primary"] {
+    background: linear-gradient(135deg, #0091DA, #00B4D8) !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 30px !important;
+    font-weight: 700 !important;
+    padding: 0.8rem 2rem !important;
+    font-size: 1rem !important;
+}
+button[kind="primary"]:hover,
+button[data-testid="baseButton-primary"]:hover {
+    background: linear-gradient(135deg, #007BBD, #0091DA) !important;
 }
 
 /* 戻るボタン：グレー */
@@ -306,7 +264,6 @@ div.stButton > button:first-child {
 .axis-bar-fill {
     height: 100%;
     border-radius: 6px;
-    transition: width 0.5s ease;
 }
 .axis-bar-marker {
     position: absolute;
@@ -326,130 +283,26 @@ div.stButton > button:first-child {
 # 質問データ（20問：各軸5問）
 # ============================================================
 QUESTIONS = [
-    # 軸1: S(癒し) vs A(冒険)  — スコア低い=S, 高い=A
-    {
-        "axis": "SA",
-        "text": "旅先での理想の朝の過ごし方は？",
-        "left": "温泉や宿でゆっくり",
-        "right": "早起きして絶景スポットへ",
-    },
-    {
-        "axis": "SA",
-        "text": "旅行の醍醐味は？",
-        "left": "日常を忘れてリラックス",
-        "right": "非日常のスリルや冒険",
-    },
-    {
-        "axis": "SA",
-        "text": "旅先で雨が降ったら？",
-        "left": "宿や温泉でのんびり過ごす",
-        "right": "雨でも外に出て探索する",
-    },
-    {
-        "axis": "SA",
-        "text": "旅行中に空き時間ができたら？",
-        "left": "カフェでゆったりくつろぐ",
-        "right": "予定外のスポットを探しに行く",
-    },
-    {
-        "axis": "SA",
-        "text": "宿を選ぶ基準は？",
-        "left": "設備や温泉の質を最重視",
-        "right": "アクティビティへのアクセス重視",
-    },
-    # 軸2: C(カルチャー) vs N(ネイチャー) — 低い=C, 高い=N
-    {
-        "axis": "CN",
-        "text": "旅先でカメラを向けるのは？",
-        "left": "建築物や街並み・アート",
-        "right": "山・海・花などの自然",
-    },
-    {
-        "axis": "CN",
-        "text": "「感動した！」と言いそうな場面は？",
-        "left": "美術館で素晴らしい作品に出会う",
-        "right": "展望台から絶景を見渡す",
-    },
-    {
-        "axis": "CN",
-        "text": "旅の思い出として残りやすいのは？",
-        "left": "歴史ある建造物やお寺の雰囲気",
-        "right": "雄大な山や美しい海岸線",
-    },
-    {
-        "axis": "CN",
-        "text": "ガイドブックで最初に開くページは？",
-        "left": "博物館・美術館・文化財特集",
-        "right": "絶景・自然・ハイキング特集",
-    },
-    {
-        "axis": "CN",
-        "text": "SNSでシェアしたくなる写真は？",
-        "left": "おしゃれな建物やアート空間",
-        "right": "大自然のダイナミックな風景",
-    },
-    # 軸3: G(グルメ) vs E(体験) — 低い=G, 高い=E
-    {
-        "axis": "GE",
-        "text": "旅行の計画で最初に調べるのは？",
-        "left": "その土地の名物料理やお店",
-        "right": "体験できるアクティビティ",
-    },
-    {
-        "axis": "GE",
-        "text": "旅の満足度を最も左右するのは？",
-        "left": "美味しい食事に出会えたかどうか",
-        "right": "心に残る体験ができたかどうか",
-    },
-    {
-        "axis": "GE",
-        "text": "旅行のお土産は？",
-        "left": "地元の食材やお菓子を買いたい",
-        "right": "体験の記念品や写真が宝物",
-    },
-    {
-        "axis": "GE",
-        "text": "自由時間が2時間あったら？",
-        "left": "地元で評判のお店を食べ歩き",
-        "right": "気になるワークショップに参加",
-    },
-    {
-        "axis": "GE",
-        "text": "旅先で一番テンションが上がる瞬間は？",
-        "left": "期待以上に美味しい料理が出てきた時",
-        "right": "初めてのアクティビティに挑戦する時",
-    },
-    # 軸4: D(じっくり) vs W(広く) — 低い=D, 高い=W
-    {
-        "axis": "DW",
-        "text": "旅行のスタイルは？",
-        "left": "少ない場所をじっくり深く楽しむ",
-        "right": "できるだけ多くの場所を回りたい",
-    },
-    {
-        "axis": "DW",
-        "text": "1つの観光地での滞在時間は？",
-        "left": "たっぷり時間をかけて堪能する",
-        "right": "サクッと見てどんどん次へ行く",
-    },
-    {
-        "axis": "DW",
-        "text": "理想の旅行計画は？",
-        "left": "余白の多いゆとりあるスケジュール",
-        "right": "分刻みで詰め込んだスケジュール",
-    },
-    {
-        "axis": "DW",
-        "text": "旅先の飲食店選びは？",
-        "left": "1軒のお店でコースをじっくり",
-        "right": "何軒もハシゴして色々味わう",
-    },
-    {
-        "axis": "DW",
-        "text": "帰宅後に旅を振り返ると？",
-        "left": "1つの体験を深く語りたい",
-        "right": "たくさんの場所の写真を見せたい",
-    },
+    {"axis": "SA", "text": "旅先での理想の朝の過ごし方は？", "left": "温泉や宿でゆっくり", "right": "早起きして絶景スポットへ"},
+    {"axis": "SA", "text": "旅行の醍醐味は？", "left": "日常を忘れてリラックス", "right": "非日常のスリルや冒険"},
+    {"axis": "SA", "text": "旅先で雨が降ったら？", "left": "宿や温泉でのんびり過ごす", "right": "雨でも外に出て探索する"},
+    {"axis": "SA", "text": "旅行中に空き時間ができたら？", "left": "カフェでゆったりくつろぐ", "right": "予定外のスポットを探しに行く"},
+    {"axis": "SA", "text": "宿を選ぶ基準は？", "left": "設備や温泉の質を最重視", "right": "アクティビティへのアクセス重視"},
+    {"axis": "CN", "text": "旅先でカメラを向けるのは？", "left": "建築物や街並み・アート", "right": "山・海・花などの自然"},
+    {"axis": "CN", "text": "「感動した！」と言いそうな場面は？", "left": "美術館で素晴らしい作品に出会う", "right": "展望台から絶景を見渡す"},
+    {"axis": "CN", "text": "旅の思い出として残りやすいのは？", "left": "歴史ある建造物やお寺の雰囲気", "right": "雄大な山や美しい海岸線"},
+    {"axis": "CN", "text": "ガイドブックで最初に開くページは？", "left": "博物館・美術館・文化財特集", "right": "絶景・自然・ハイキング特集"},
+    {"axis": "CN", "text": "SNSでシェアしたくなる写真は？", "left": "おしゃれな建物やアート空間", "right": "大自然のダイナミックな風景"},
+    {"axis": "GE", "text": "旅行の計画で最初に調べるのは？", "left": "その土地の名物料理やお店", "right": "体験できるアクティビティ"},
+    {"axis": "GE", "text": "旅の満足度を最も左右するのは？", "left": "美味しい食事に出会えたかどうか", "right": "心に残る体験ができたかどうか"},
+    {"axis": "GE", "text": "旅行のお土産は？", "left": "地元の食材やお菓子を買いたい", "right": "体験の記念品や写真が宝物"},
+    {"axis": "GE", "text": "自由時間が2時間あったら？", "left": "地元で評判のお店を食べ歩き", "right": "気になるワークショップに参加"},
+    {"axis": "GE", "text": "旅先で一番テンションが上がる瞬間は？", "left": "期待以上に美味しい料理が出てきた時", "right": "初めてのアクティビティに挑戦する時"},
+    {"axis": "DW", "text": "旅行のスタイルは？", "left": "少ない場所をじっくり深く楽しむ", "right": "できるだけ多くの場所を回りたい"},
+    {"axis": "DW", "text": "1つの観光地での滞在時間は？", "left": "たっぷり時間をかけて堪能する", "right": "サクッと見てどんどん次へ行く"},
+    {"axis": "DW", "text": "理想の旅行計画は？", "left": "余白の多いゆとりあるスケジュール", "right": "分刻みで詰め込んだスケジュール"},
+    {"axis": "DW", "text": "旅先の飲食店選びは？", "left": "1軒のお店でコースをじっくり", "right": "何軒もハシゴして色々味わう"},
+    {"axis": "DW", "text": "帰宅後に旅を振り返ると？", "left": "1つの体験を深く語りたい", "right": "たくさんの場所の写真を見せたい"},
 ]
 
 # ============================================================
@@ -582,11 +435,10 @@ TYPES = {
 # ユーティリティ関数
 # ============================================================
 def calc_scores(answers):
-    """回答(1-5)から各軸スコアを計算。1=-2, 2=-1, 3=0, 4=+1, 5=+2"""
     axes = {"SA": 0, "CN": 0, "GE": 0, "DW": 0}
     for i, q in enumerate(QUESTIONS):
         if i < len(answers) and answers[i] is not None:
-            axes[q["axis"]] += answers[i] - 3  # 1→-2, 2→-1, 3→0, 4→+1, 5→+2
+            axes[q["axis"]] += answers[i] - 3
     return axes
 
 def determine_type(scores):
@@ -598,7 +450,6 @@ def determine_type(scores):
     return code
 
 def score_to_percent(score, num_questions=5):
-    """軸スコア(-10~+10)を0~100%に変換"""
     max_score = num_questions * 2
     return int((score + max_score) / (2 * max_score) * 100)
 
@@ -651,7 +502,7 @@ def page_top():
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("✨ 診断をはじめる", type="primary", use_container_width=True):
+    if st.button("診断をはじめる", type="primary", use_container_width=True):
         st.session_state.page = "quiz"
         st.session_state.q_index = 0
         st.session_state.answers = [None] * 20
@@ -659,12 +510,6 @@ def page_top():
 
 # ============================================================
 # ページ: 質問
-# ============================================================
-# ============================================================
-# ページ: 質問（修正版）
-# ============================================================
-# ============================================================
-# ページ: 質問（修正版v2）
 # ============================================================
 def page_quiz():
     idx = st.session_state.q_index
@@ -748,6 +593,7 @@ def page_quiz():
             st.session_state.q_index -= 1
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
+
 # ============================================================
 # ページ: 結果
 # ============================================================
@@ -772,7 +618,7 @@ def page_result():
     """, unsafe_allow_html=True)
 
     # 4軸バー
-    st.markdown("### 📊 あなたの旅スタイル")
+    st.markdown("### あなたの旅スタイル")
     axis_info = [
         ("SA", "🛁 癒し (S)", "🏔️ 冒険 (A)"),
         ("CN", "🏛️ カルチャー (C)", "🌿 ネイチャー (N)"),
@@ -797,7 +643,7 @@ def page_result():
     st.markdown("<div style='height:1rem'></div>", unsafe_allow_html=True)
 
     # おすすめスポット
-    st.markdown("### 🗾 おすすめ観光スポット")
+    st.markdown("### おすすめ観光スポット")
     for spot_name in t["spots"]:
         desc = SPOT_DETAILS.get(spot_name, "")
         st.markdown(f"""
