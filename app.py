@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import datetime
 import json
 import urllib.request
@@ -17,12 +18,11 @@ st.set_page_config(
 GAS_URL = ""  # GASデプロイ後にURLを貼り付け
 
 # ============================================================
-# CSS
+# CSS（丸ボタン以外の要素用）
 # ============================================================
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
-
 .stApp {
     font-family: 'Noto Sans JP', sans-serif;
     background: linear-gradient(180deg, #E8F4FD 0%, #FFFFFF 100%);
@@ -30,162 +30,49 @@ st.markdown("""
 header[data-testid="stHeader"] { display: none; }
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
-
-/* ========================================
-   スマホでもカラムを横並びに強制
-   ======================================== */
-@media (max-width: 640px) {
-    /* カラムの親コンテナ */
-    [data-testid="stHorizontalBlock"] {
-        flex-wrap: nowrap !important;
-        gap: 0.3rem !important;
-    }
-    /* 各カラム */
-    [data-testid="column"] {
-        width: calc(20% - 0.3rem) !important;
-        flex: 1 1 calc(20% - 0.3rem) !important;
-        min-width: 0 !important;
-    }
-}
-
-/* タイトルカード */
 .title-card {
     background: linear-gradient(135deg, #0091DA 0%, #00B4D8 100%);
-    border-radius: 20px;
-    padding: 2.5rem 2rem;
-    text-align: center;
-    color: white;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 8px 32px rgba(0,145,218,0.3);
+    border-radius: 20px; padding: 2.5rem 2rem; text-align: center;
+    color: white; margin-bottom: 1.5rem; box-shadow: 0 8px 32px rgba(0,145,218,0.3);
 }
 .title-card h1 { font-size: 2rem; font-weight: 900; margin: 0 0 0.5rem 0; color: white; }
 .title-card p { font-size: 1rem; opacity: 0.9; margin: 0; color: white; }
-
-/* 質問カード */
 .question-card {
-    background: white;
-    border-radius: 16px;
-    padding: 2rem;
-    margin: 1rem 0;
+    background: white; border-radius: 16px; padding: 2rem; margin: 1rem 0;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
-.question-text {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 0;
-    line-height: 1.6;
-}
-
-/* プログレスバー */
-.progress-container {
-    background: #E0E0E0;
-    border-radius: 10px;
-    height: 8px;
-    margin: 0.5rem 0 1.5rem 0;
-    overflow: hidden;
-}
-.progress-fill {
-    background: linear-gradient(90deg, #0091DA, #00B4D8);
-    height: 100%;
-    border-radius: 10px;
-    transition: width 0.4s ease;
-}
-
-/* ===== 丸ボタン共通 ===== */
-div.circle-btn-area .stButton > button,
-div.circle-btn-selected .stButton > button {
-    border-radius: 50% !important;
-    padding: 0 !important;
-    margin: 0 auto !important;
-    display: block !important;
-    transition: all 0.2s ease !important;
-    min-height: 0 !important;
-    line-height: 0 !important;
-    font-size: 0 !important;
-    color: transparent !important;
-}
-/* 未選択 */
-div.circle-btn-area .stButton > button {
-    border: 2.5px solid #CCC !important;
-    background: white !important;
-}
-div.circle-btn-area .stButton > button:hover {
-    border-color: #0091DA !important;
-    background: rgba(0,145,218,0.08) !important;
-}
-/* 選択済み */
-div.circle-btn-selected .stButton > button {
-    border: 3px solid #0091DA !important;
-    background: #0091DA !important;
-    box-shadow: 0 2px 8px rgba(0,145,218,0.4) !important;
-}
-
-/* 丸ボタンサイズ（各カラム内のインラインCSSで上書き） */
-div.size-lg .stButton > button { width: 44px !important; height: 44px !important; }
-div.size-md .stButton > button { width: 36px !important; height: 36px !important; }
-div.size-sm .stButton > button { width: 28px !important; height: 28px !important; }
-
-/* 次へボタン */
-button[kind="primary"],
-button[data-testid="baseButton-primary"] {
+.question-text { font-size: 1.15rem; font-weight: 700; color: #333; margin-bottom: 0; line-height: 1.6; }
+.progress-container { background: #E0E0E0; border-radius: 10px; height: 8px; margin: 0.5rem 0 1.5rem 0; overflow: hidden; }
+.progress-fill { background: linear-gradient(90deg, #0091DA, #00B4D8); height: 100%; border-radius: 10px; transition: width 0.4s ease; }
+button[kind="primary"], button[data-testid="baseButton-primary"] {
     background: linear-gradient(135deg, #0091DA, #00B4D8) !important;
-    border: none !important;
-    color: white !important;
-    border-radius: 30px !important;
-    font-weight: 700 !important;
-    padding: 0.8rem 2rem !important;
-    font-size: 1rem !important;
+    border: none !important; color: white !important; border-radius: 30px !important;
+    font-weight: 700 !important; padding: 0.8rem 2rem !important; font-size: 1rem !important;
 }
-button[kind="primary"]:hover,
-button[data-testid="baseButton-primary"]:hover {
+button[kind="primary"]:hover, button[data-testid="baseButton-primary"]:hover {
     background: linear-gradient(135deg, #007BBD, #0091DA) !important;
 }
-
-/* 戻るボタン */
 .back-btn button {
-    background: #DDD !important;
-    color: #666 !important;
-    border: none !important;
-    border-radius: 30px !important;
-    width: 100%;
-    padding: 0.7rem 2rem !important;
-    font-weight: 700 !important;
+    background: #DDD !important; color: #666 !important; border: none !important;
+    border-radius: 30px !important; width: 100%; padding: 0.7rem 2rem !important; font-weight: 700 !important;
 }
-.back-btn button:hover {
-    background: #CCC !important;
-    color: #555 !important;
-}
-
-/* 結果カード */
+.back-btn button:hover { background: #CCC !important; color: #555 !important; }
 .result-card {
     background: linear-gradient(135deg, #0091DA 0%, #00B4D8 100%);
-    border-radius: 20px;
-    padding: 2.5rem 2rem;
-    text-align: center;
-    color: #FFFFFF;
-    margin: 1rem 0;
-    box-shadow: 0 8px 32px rgba(0,145,218,0.3);
+    border-radius: 20px; padding: 2.5rem 2rem; text-align: center;
+    color: #FFFFFF; margin: 1rem 0; box-shadow: 0 8px 32px rgba(0,145,218,0.3);
 }
 .result-card h2 { color: #FFFFFF; font-size: 1.5rem; font-weight: 900; margin-bottom: 0.3rem; text-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 .result-card .type-code { font-size: 2.5rem; font-weight: 900; color: #FFFFFF; letter-spacing: 0.15em; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 .result-card .type-name { font-size: 1.3rem; font-weight: 700; color: #FFFFFF; margin: 0.5rem 0; text-shadow: 0 1px 6px rgba(0,0,0,0.15); }
 .result-card .type-tagline { font-size: 1rem; color: #FFFFFF; opacity: 0.95; font-style: italic; text-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 .result-card .type-desc { font-size: 0.95rem; color: #FFFFFF; opacity: 0.9; margin-top: 1rem; line-height: 1.7; text-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-
-/* スポットカード */
 .spot-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1rem 1.2rem;
-    margin: 0.5rem 0;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    border-left: 4px solid #0091DA;
+    background: white; border-radius: 12px; padding: 1rem 1.2rem; margin: 0.5rem 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-left: 4px solid #0091DA;
 }
 .spot-card h4 { color: #0091DA; margin: 0 0 0.3rem 0; font-size: 1rem; }
 .spot-card p { color: #555; font-size: 0.85rem; margin: 0; line-height: 1.5; }
-
-/* 軸バー */
 .axis-bar-container { margin: 0.8rem 0; }
 .axis-bar-labels { display: flex; justify-content: space-between; font-size: 0.8rem; color: #555; margin-bottom: 4px; }
 .axis-bar { background: #E0E0E0; border-radius: 6px; height: 12px; position: relative; overflow: visible; }
@@ -309,8 +196,44 @@ def save_to_gas(answers, scores, type_code):
     except Exception:
         pass
 
+def render_circle_buttons(idx, current_val, left_label, right_label):
+    """丸ボタン5つをHTML/JSで描画。選択するとiframe親のURLパラメータを書き換える"""
+    sizes = [44, 36, 28, 36, 44]
+    circles = ""
+    for i in range(5):
+        val = i + 1
+        s = sizes[i]
+        if current_val == val:
+            style = f"width:{s}px;height:{s}px;border-radius:50%;background:#0091DA;border:3px solid #0091DA;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,145,218,0.4);transition:all 0.2s;vertical-align:middle;"
+            inner = f'<div style="width:{int(s*0.35)}px;height:{int(s*0.35)}px;border-radius:50%;background:white;"></div>'
+        else:
+            style = f"width:{s}px;height:{s}px;border-radius:50%;background:white;border:2.5px solid #CCC;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all 0.2s;vertical-align:middle;"
+            inner = ""
+        circles += f'<div onclick="selectVal({val})" style="{style}">{inner}</div>\n'
+
+    html_code = f"""
+    <div style="font-family:'Noto Sans JP',sans-serif;padding:0.5rem 0;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span style="font-size:0.78rem;color:#888;">{left_label}</span>
+            <span style="font-size:0.78rem;color:#888;">{right_label}</span>
+        </div>
+        <div style="display:flex;justify-content:center;align-items:center;gap:12px;">
+            {circles}
+        </div>
+    </div>
+    <script>
+    function selectVal(v) {{
+        // Streamlit の親ウィンドウのURLにパラメータを追加してリロード
+        const url = new URL(window.parent.location.href);
+        url.searchParams.set('ans_{idx}', v);
+        window.parent.location.href = url.toString();
+    }}
+    </script>
+    """
+    components.html(html_code, height=100, scrolling=False)
+
 # ============================================================
-# セッション初期化
+# セッション初期化 & URLパラメータ読み取り
 # ============================================================
 if "page" not in st.session_state:
     st.session_state.page = "top"
@@ -318,6 +241,17 @@ if "q_index" not in st.session_state:
     st.session_state.q_index = 0
 if "answers" not in st.session_state:
     st.session_state.answers = [None] * 20
+
+# URLパラメータから回答を読み取り
+params = st.query_params
+for i in range(20):
+    key = f"ans_{i}"
+    if key in params:
+        val = int(params[key])
+        if st.session_state.answers[i] != val:
+            st.session_state.answers[i] = val
+            st.session_state.page = "quiz"
+            st.session_state.q_index = i
 
 # ============================================================
 # ページ: トップ
@@ -330,7 +264,6 @@ def page_top():
         <p style="font-size:0.85rem; margin-top:1rem; opacity:0.8;">所要時間：約3分</p>
     </div>
     """, unsafe_allow_html=True)
-
     st.markdown("""
     <div style="background:white; border-radius:12px; padding:1.5rem; margin:1rem 0; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
         <p style="color:#333; font-size:0.95rem; line-height:1.8; margin:0;">
@@ -339,11 +272,12 @@ def page_top():
         </p>
     </div>
     """, unsafe_allow_html=True)
-
     if st.button("診断をはじめる", type="primary", use_container_width=True):
         st.session_state.page = "quiz"
         st.session_state.q_index = 0
         st.session_state.answers = [None] * 20
+        # URLパラメータをクリア
+        st.query_params.clear()
         st.rerun()
 
 # ============================================================
@@ -353,6 +287,7 @@ def page_quiz():
     idx = st.session_state.q_index
     q = QUESTIONS[idx]
     progress = idx / 20
+    current_val = st.session_state.answers[idx]
 
     st.markdown(f"""
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem;">
@@ -370,32 +305,8 @@ def page_quiz():
     </div>
     """, unsafe_allow_html=True)
 
-    # 左右ラベル
-    st.markdown(f"""
-    <div style="display:flex; justify-content:space-between; padding:0 0.5rem; margin-bottom:0.3rem;">
-        <span style="font-size:0.78rem; color:#888;">{q["left"]}</span>
-        <span style="font-size:0.78rem; color:#888;">{q["right"]}</span>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # 丸ボタン5つ
-    current_val = st.session_state.answers[idx]
-    size_classes = ["size-lg", "size-md", "size-sm", "size-md", "size-lg"]
-
-    cols = st.columns(5, gap="small")
-    for i, col in enumerate(cols):
-        val = i + 1
-        is_selected = (current_val == val)
-        btn_class = "circle-btn-selected" if is_selected else "circle-btn-area"
-        size_class = size_classes[i]
-        with col:
-            st.markdown(f'<div class="{btn_class} {size_class}">', unsafe_allow_html=True)
-            if st.button("ㅤ", key=f"c_{idx}_{val}"):
-                st.session_state.answers[idx] = val
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
-
-    st.markdown("<div style='height:0.8rem'></div>", unsafe_allow_html=True)
+    # 丸ボタン（HTML/JS、スマホでも確実に横並び）
+    render_circle_buttons(idx, current_val, q["left"], q["right"])
 
     # 「次へ」ボタン
     if current_val is not None:
@@ -430,7 +341,6 @@ def page_result():
     scores = calc_scores(answers)
     type_code = determine_type(scores)
     t = TYPES.get(type_code, TYPES["SNGD"])
-
     save_to_gas(answers, scores, type_code)
 
     st.markdown(f"""
@@ -444,83 +354,48 @@ def page_result():
     """, unsafe_allow_html=True)
 
     st.markdown("### あなたの旅スタイル")
-    axis_info = [
-        ("SA", "🛁 癒し (S)", "🏔️ 冒険 (A)"),
-        ("CN", "🏛️ カルチャー (C)", "🌿 ネイチャー (N)"),
-        ("GE", "🍣 グルメ (G)", "🎭 体験 (E)"),
-        ("DW", "🔍 じっくり (D)", "🗺️ 広く (W)"),
-    ]
-    for axis_key, left_label, right_label in axis_info:
+    for axis_key, left_label, right_label in [("SA","🛁 癒し (S)","🏔️ 冒険 (A)"),("CN","🏛️ カルチャー (C)","🌿 ネイチャー (N)"),("GE","🍣 グルメ (G)","🎭 体験 (E)"),("DW","🔍 じっくり (D)","🗺️ 広く (W)")]:
         pct = score_to_percent(scores[axis_key])
         st.markdown(f"""
         <div class="axis-bar-container">
-            <div class="axis-bar-labels">
-                <span>{left_label}</span>
-                <span>{right_label}</span>
-            </div>
-            <div class="axis-bar">
-                <div class="axis-bar-marker" style="left:{pct}%;"></div>
-            </div>
+            <div class="axis-bar-labels"><span>{left_label}</span><span>{right_label}</span></div>
+            <div class="axis-bar"><div class="axis-bar-marker" style="left:{pct}%;"></div></div>
         </div>
         """, unsafe_allow_html=True)
 
     st.markdown("<div style='height:1rem'></div>", unsafe_allow_html=True)
-
     st.markdown("### おすすめ観光スポット")
     for spot_name in t["spots"]:
         desc = SPOT_DETAILS.get(spot_name, "")
-        st.markdown(f"""
-        <div class="spot-card">
-            <h4>📍 {spot_name}</h4>
-            <p>{desc}</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f'<div class="spot-card"><h4>📍 {spot_name}</h4><p>{desc}</p></div>', unsafe_allow_html=True)
 
     with st.expander("📈 このタイプの旅行者データ（参考）"):
-        st.markdown("""
-        <div style="font-size:0.9rem; color:#555; line-height:1.8;">
-            ※ 富山県観光ウェブアンケート（2025年）の回答データに基づく参考値です。<br>
-            個人差がありますので、あくまで目安としてお楽しみください。
-        </div>
-        """, unsafe_allow_html=True)
-        col1, col2 = st.columns(2)
-        with col1:
+        st.markdown('<div style="font-size:0.9rem;color:#555;line-height:1.8;">※ 富山県観光ウェブアンケート（2025年）の回答データに基づく参考値です。</div>', unsafe_allow_html=True)
+        c1, c2 = st.columns(2)
+        with c1:
             st.metric("平均飲食消費額", "約15,000〜25,000円")
             st.metric("平均宿泊数", "1〜2泊")
-        with col2:
+        with c2:
             st.metric("旅行全体の満足度", "4.3 / 5.0")
             st.metric("再来訪意向", "高い傾向")
 
-    st.markdown("<div style='height:1rem'></div>", unsafe_allow_html=True)
-
     with st.expander("📋 全16タイプ一覧"):
         for code, info in TYPES.items():
-            highlight = "border:2px solid #0091DA; background:#E8F4FD;" if code == type_code else ""
-            st.markdown(f"""
-            <div style="padding:0.8rem; margin:0.4rem 0; border-radius:10px; background:white; box-shadow:0 1px 6px rgba(0,0,0,0.05); {highlight}">
-                <strong style="color:#0091DA;">{code}</strong>
-                <span style="color:#333; font-weight:700; margin-left:0.5rem;">{info["name"]}</span>
-                <br><span style="color:#777; font-size:0.85rem;">{info["tagline"]}</span>
-            </div>
-            """, unsafe_allow_html=True)
+            hl = "border:2px solid #0091DA;background:#E8F4FD;" if code == type_code else ""
+            st.markdown(f'<div style="padding:0.8rem;margin:0.4rem 0;border-radius:10px;background:white;box-shadow:0 1px 6px rgba(0,0,0,0.05);{hl}"><strong style="color:#0091DA;">{code}</strong> <span style="color:#333;font-weight:700;">{info["name"]}</span><br><span style="color:#777;font-size:0.85rem;">{info["tagline"]}</span></div>', unsafe_allow_html=True)
 
     st.markdown("<div style='height:1rem'></div>", unsafe_allow_html=True)
-
-    col_a, col_b = st.columns(2)
-    with col_a:
+    ca, cb = st.columns(2)
+    with ca:
         if st.button("🔄 もう一度診断する", use_container_width=True):
             st.session_state.page = "top"
             st.session_state.q_index = 0
             st.session_state.answers = [None] * 20
+            st.query_params.clear()
             st.rerun()
-    with col_b:
+    with cb:
         share_text = urllib.parse.quote(f"私の富山旅タイプは【{type_code}】{t['name']}でした！ #富山旅タイプ診断")
-        st.markdown(
-            f'<a href="https://twitter.com/intent/tweet?text={share_text}" target="_blank">'
-            f'<button style="width:100%;padding:0.6rem;border-radius:30px;border:2px solid #1DA1F2;'
-            f'background:white;color:#1DA1F2;font-weight:700;cursor:pointer;">🐦 Xでシェア</button></a>',
-            unsafe_allow_html=True,
-        )
+        st.markdown(f'<a href="https://twitter.com/intent/tweet?text={share_text}" target="_blank"><button style="width:100%;padding:0.6rem;border-radius:30px;border:2px solid #1DA1F2;background:white;color:#1DA1F2;font-weight:700;cursor:pointer;">🐦 Xでシェア</button></a>', unsafe_allow_html=True)
 
 # ============================================================
 # ルーティング
