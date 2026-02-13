@@ -31,6 +31,23 @@ header[data-testid="stHeader"] { display: none; }
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
 
+/* ========================================
+   スマホでもカラムを横並びに強制
+   ======================================== */
+@media (max-width: 640px) {
+    /* カラムの親コンテナ */
+    [data-testid="stHorizontalBlock"] {
+        flex-wrap: nowrap !important;
+        gap: 0.3rem !important;
+    }
+    /* 各カラム */
+    [data-testid="column"] {
+        width: calc(20% - 0.3rem) !important;
+        flex: 1 1 calc(20% - 0.3rem) !important;
+        min-width: 0 !important;
+    }
+}
+
 /* タイトルカード */
 .title-card {
     background: linear-gradient(135deg, #0091DA 0%, #00B4D8 100%);
@@ -75,12 +92,10 @@ footer { visibility: hidden; }
     transition: width 0.4s ease;
 }
 
-/* ===== 丸ボタン（st.buttonベース） ===== */
-div.circle-btn-area .stButton > button {
+/* ===== 丸ボタン共通 ===== */
+div.circle-btn-area .stButton > button,
+div.circle-btn-selected .stButton > button {
     border-radius: 50% !important;
-    border: 2.5px solid #CCC !important;
-    background: white !important;
-    color: transparent !important;
     padding: 0 !important;
     margin: 0 auto !important;
     display: block !important;
@@ -88,32 +103,28 @@ div.circle-btn-area .stButton > button {
     min-height: 0 !important;
     line-height: 0 !important;
     font-size: 0 !important;
+    color: transparent !important;
+}
+/* 未選択 */
+div.circle-btn-area .stButton > button {
+    border: 2.5px solid #CCC !important;
+    background: white !important;
 }
 div.circle-btn-area .stButton > button:hover {
     border-color: #0091DA !important;
     background: rgba(0,145,218,0.08) !important;
 }
-div.circle-btn-area .stButton > button:focus,
-div.circle-btn-area .stButton > button:active {
-    border-color: #0091DA !important;
-    box-shadow: none !important;
-}
-/* サイズはインラインstyleで制御 */
-
-/* 選択済み丸ボタン */
+/* 選択済み */
 div.circle-btn-selected .stButton > button {
-    border-radius: 50% !important;
     border: 3px solid #0091DA !important;
     background: #0091DA !important;
-    color: transparent !important;
-    padding: 0 !important;
-    margin: 0 auto !important;
-    display: block !important;
     box-shadow: 0 2px 8px rgba(0,145,218,0.4) !important;
-    min-height: 0 !important;
-    line-height: 0 !important;
-    font-size: 0 !important;
 }
+
+/* 丸ボタンサイズ（各カラム内のインラインCSSで上書き） */
+div.size-lg .stButton > button { width: 44px !important; height: 44px !important; }
+div.size-md .stButton > button { width: 36px !important; height: 36px !important; }
+div.size-sm .stButton > button { width: 28px !important; height: 28px !important; }
 
 /* 次へボタン */
 button[kind="primary"],
@@ -367,27 +378,18 @@ def page_quiz():
     </div>
     """, unsafe_allow_html=True)
 
-    # 丸ボタン5つ（st.button ベース）
+    # 丸ボタン5つ
     current_val = st.session_state.answers[idx]
-    sizes = [44, 36, 28, 36, 44]  # px
+    size_classes = ["size-lg", "size-md", "size-sm", "size-md", "size-lg"]
 
-    cols = st.columns([1, 1, 1, 1, 1])
+    cols = st.columns(5, gap="small")
     for i, col in enumerate(cols):
         val = i + 1
-        size = sizes[i]
         is_selected = (current_val == val)
+        btn_class = "circle-btn-selected" if is_selected else "circle-btn-area"
+        size_class = size_classes[i]
         with col:
-            # 選択済みか未選択かでCSSクラスを切り替え
-            css_class = "circle-btn-selected" if is_selected else "circle-btn-area"
-            st.markdown(f'<div class="{css_class}" style="text-align:center;">', unsafe_allow_html=True)
-            st.markdown(f"""
-            <style>
-            div.{css_class} div[data-testid="stButton"] > button {{
-                width: {size}px !important;
-                height: {size}px !important;
-            }}
-            </style>
-            """, unsafe_allow_html=True)
+            st.markdown(f'<div class="{btn_class} {size_class}">', unsafe_allow_html=True)
             if st.button("ㅤ", key=f"c_{idx}_{val}"):
                 st.session_state.answers[idx] = val
                 st.rerun()
