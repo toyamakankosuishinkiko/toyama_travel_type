@@ -23,13 +23,10 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
 
-/* 全体 */
 .stApp {
     font-family: 'Noto Sans JP', sans-serif;
     background: linear-gradient(180deg, #E8F4FD 0%, #FFFFFF 100%);
 }
-
-/* ヘッダー非表示 */
 header[data-testid="stHeader"] { display: none; }
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
@@ -44,18 +41,8 @@ footer { visibility: hidden; }
     margin-bottom: 1.5rem;
     box-shadow: 0 8px 32px rgba(0,145,218,0.3);
 }
-.title-card h1 {
-    font-size: 2rem;
-    font-weight: 900;
-    margin: 0 0 0.5rem 0;
-    color: white;
-}
-.title-card p {
-    font-size: 1rem;
-    opacity: 0.9;
-    margin: 0;
-    color: white;
-}
+.title-card h1 { font-size: 2rem; font-weight: 900; margin: 0 0 0.5rem 0; color: white; }
+.title-card p { font-size: 1rem; opacity: 0.9; margin: 0; color: white; }
 
 /* 質問カード */
 .question-card {
@@ -88,63 +75,47 @@ footer { visibility: hidden; }
     transition: width 0.4s ease;
 }
 
-/* ===== ラジオボタンを丸ボタン化 ===== */
-div.quiz-radio div[data-testid="stRadio"] > label {
-    display: none !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 12px !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+/* ===== 丸ボタン（st.buttonベース） ===== */
+div.circle-btn-area .stButton > button {
     border-radius: 50% !important;
     border: 2.5px solid #CCC !important;
     background: white !important;
     color: transparent !important;
     padding: 0 !important;
-    margin: 0 !important;
-    cursor: pointer !important;
+    margin: 0 auto !important;
+    display: block !important;
     transition: all 0.2s ease !important;
     min-height: 0 !important;
+    line-height: 0 !important;
+    font-size: 0 !important;
 }
-div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(1),
-div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(5) {
-    width: 44px !important;
-    height: 44px !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(2),
-div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(4) {
-    width: 36px !important;
-    height: 36px !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label:nth-child(3) {
-    width: 28px !important;
-    height: 28px !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label[data-checked="true"],
-div.quiz-radio div[data-testid="stRadio"] > div > label:has(input:checked) {
-    background: #0091DA !important;
+div.circle-btn-area .stButton > button:hover {
     border-color: #0091DA !important;
+    background: rgba(0,145,218,0.08) !important;
+}
+div.circle-btn-area .stButton > button:focus,
+div.circle-btn-area .stButton > button:active {
+    border-color: #0091DA !important;
+    box-shadow: none !important;
+}
+/* サイズはインラインstyleで制御 */
+
+/* 選択済み丸ボタン */
+div.circle-btn-selected .stButton > button {
+    border-radius: 50% !important;
+    border: 3px solid #0091DA !important;
+    background: #0091DA !important;
+    color: transparent !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    display: block !important;
     box-shadow: 0 2px 8px rgba(0,145,218,0.4) !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label > div {
-    display: none !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label > div:first-child {
-    display: none !important;
-}
-div.quiz-radio div[data-testid="stRadio"] > div > label p,
-div.quiz-radio div[data-testid="stRadio"] > div > label span {
-    display: none !important;
+    min-height: 0 !important;
+    line-height: 0 !important;
+    font-size: 0 !important;
 }
 
-/* ===== 次へボタン青色化 ===== */
+/* 次へボタン */
 button[kind="primary"],
 button[data-testid="baseButton-primary"] {
     background: linear-gradient(135deg, #0091DA, #00B4D8) !important;
@@ -160,7 +131,7 @@ button[data-testid="baseButton-primary"]:hover {
     background: linear-gradient(135deg, #007BBD, #0091DA) !important;
 }
 
-/* 戻るボタン：グレー */
+/* 戻るボタン */
 .back-btn button {
     background: #DDD !important;
     color: #666 !important;
@@ -185,42 +156,11 @@ button[data-testid="baseButton-primary"]:hover {
     margin: 1rem 0;
     box-shadow: 0 8px 32px rgba(0,145,218,0.3);
 }
-.result-card h2 {
-    color: #FFFFFF;
-    font-size: 1.5rem;
-    font-weight: 900;
-    margin-bottom: 0.3rem;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-.result-card .type-code {
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: #FFFFFF;
-    letter-spacing: 0.15em;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-.result-card .type-name {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #FFFFFF;
-    margin: 0.5rem 0;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.15);
-}
-.result-card .type-tagline {
-    font-size: 1rem;
-    color: #FFFFFF;
-    opacity: 0.95;
-    font-style: italic;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-.result-card .type-desc {
-    font-size: 0.95rem;
-    color: #FFFFFF;
-    opacity: 0.9;
-    margin-top: 1rem;
-    line-height: 1.7;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
+.result-card h2 { color: #FFFFFF; font-size: 1.5rem; font-weight: 900; margin-bottom: 0.3rem; text-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.result-card .type-code { font-size: 2.5rem; font-weight: 900; color: #FFFFFF; letter-spacing: 0.15em; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+.result-card .type-name { font-size: 1.3rem; font-weight: 700; color: #FFFFFF; margin: 0.5rem 0; text-shadow: 0 1px 6px rgba(0,0,0,0.15); }
+.result-card .type-tagline { font-size: 1rem; color: #FFFFFF; opacity: 0.95; font-style: italic; text-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.result-card .type-desc { font-size: 0.95rem; color: #FFFFFF; opacity: 0.9; margin-top: 1rem; line-height: 1.7; text-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 
 /* スポットカード */
 .spot-card {
@@ -231,56 +171,23 @@ button[data-testid="baseButton-primary"]:hover {
     box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     border-left: 4px solid #0091DA;
 }
-.spot-card h4 {
-    color: #0091DA;
-    margin: 0 0 0.3rem 0;
-    font-size: 1rem;
-}
-.spot-card p {
-    color: #555;
-    font-size: 0.85rem;
-    margin: 0;
-    line-height: 1.5;
-}
+.spot-card h4 { color: #0091DA; margin: 0 0 0.3rem 0; font-size: 1rem; }
+.spot-card p { color: #555; font-size: 0.85rem; margin: 0; line-height: 1.5; }
 
 /* 軸バー */
-.axis-bar-container {
-    margin: 0.8rem 0;
-}
-.axis-bar-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: #555;
-    margin-bottom: 4px;
-}
-.axis-bar {
-    background: #E0E0E0;
-    border-radius: 6px;
-    height: 12px;
-    position: relative;
-    overflow: visible;
-}
-.axis-bar-fill {
-    height: 100%;
-    border-radius: 6px;
-}
+.axis-bar-container { margin: 0.8rem 0; }
+.axis-bar-labels { display: flex; justify-content: space-between; font-size: 0.8rem; color: #555; margin-bottom: 4px; }
+.axis-bar { background: #E0E0E0; border-radius: 6px; height: 12px; position: relative; overflow: visible; }
 .axis-bar-marker {
-    position: absolute;
-    top: -4px;
-    width: 20px;
-    height: 20px;
-    background: white;
-    border: 3px solid #0091DA;
-    border-radius: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    position: absolute; top: -4px; width: 20px; height: 20px;
+    background: white; border: 3px solid #0091DA; border-radius: 50%;
+    transform: translateX(-50%); box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 </style>
 """, unsafe_allow_html=True)
 
 # ============================================================
-# 質問データ（20問：各軸5問）
+# 質問データ
 # ============================================================
 QUESTIONS = [
     {"axis": "SA", "text": "旅先での理想の朝の過ごし方は？", "left": "温泉や宿でゆっくり", "right": "早起きして絶景スポットへ"},
@@ -333,106 +240,26 @@ SPOT_DETAILS = {
 }
 
 TYPES = {
-    "SCGD": {
-        "name": "富山じっくり美食の語り部",
-        "tagline": "「老舗の寿司屋のカウンターで、時を忘れて語らう」",
-        "desc": "歴史ある町並みを散策し、上質な食をじっくり堪能するのがあなたのスタイル。急がず焦らず、一つひとつの味と文化に深く向き合う旅を好みます。",
-        "spots": ["岩瀬エリア", "国宝 高岡山瑞龍寺", "新湊きっときと市場"],
-    },
-    "SCGW": {
-        "name": "富山カルチャー×食べ歩きマスター",
-        "tagline": "「午前は美術館、午後は回転寿司、夜は地酒バー」",
-        "desc": "文化もグルメも効率よく制覇するのがあなた流。限られた時間で最大限の「美味しい」と「美しい」を回収します。",
-        "spots": ["富山市ガラス美術館", "富岩運河環水公園", "富山城", "高岡大仏"],
-    },
-    "SCED": {
-        "name": "知的好奇心の温泉学者",
-        "tagline": "「美術館で知を磨き、温泉で心を解き放つ」",
-        "desc": "美術館や博物館で知的好奇心を満たした後は、温泉でゆっくりリフレッシュ。インプットとリラックスのバランスが絶妙な旅人です。",
-        "spots": ["富山県美術館", "宇奈月温泉", "五箇山"],
-    },
-    "SCEW": {
-        "name": "まちあるきカルチャー探検家",
-        "tagline": "「路面電車に揺られて、未知の路地へ飛び込む」",
-        "desc": "街歩きで偶然の出会いを楽しむタイプ。文化イベントや体験プログラムにも積極的に参加し、知らない世界を広く探ります。",
-        "spots": ["富山城", "高岡大仏", "海王丸パーク", "岩瀬エリア"],
-    },
-    "SNGD": {
-        "name": "富山の恵みに浸る至福の旅人",
-        "tagline": "「雨晴海岸で絶景、温泉で極楽、白エビで至福」",
-        "desc": "自然の美しさと温泉の癒し、そして海の幸を心ゆくまで堪能する三拍子の旅。一つの場所でじっくりと富山の恵みに浸ります。",
-        "spots": ["雨晴海岸", "宇奈月温泉", "ほたるいかミュージアム"],
-    },
-    "SNGW": {
-        "name": "絶景ハンターの美食家",
-        "tagline": "「朝は立山の絶景、昼は港町の海の幸」",
-        "desc": "自然の絶景ポイントを効率よく回りながら、行く先々でご当地グルメも欠かさない欲張りスタイル。テンポよく「映え×美味」を巡ります。",
-        "spots": ["雨晴海岸", "新湊きっときと市場", "砺波チューリップ公園", "新湊大橋"],
-    },
-    "SNED": {
-        "name": "大自然と温泉に癒される求道者",
-        "tagline": "「称名滝の轟音を聴きながら、温泉で心を浄化する」",
-        "desc": "壮大な自然と温泉だけがあればいい。人混みを避け、大自然の静寂の中でじっくり自分と向き合う、究極の癒し旅を求めます。",
-        "spots": ["庄川峡遊覧船", "称名滝", "宇奈月温泉"],
-    },
-    "SNEW": {
-        "name": "風まかせの自然派トラベラー",
-        "tagline": "「風の向くまま、山から海へ」",
-        "desc": "計画はほどほどに、自然が美しい場所を気の向くままに巡ります。花畑も海岸も山も、広く浅くではなく「広く美しく」がモットーです。",
-        "spots": ["雨晴海岸", "海王丸パーク", "砺波チューリップ公園", "あさひ舟川「春の四重奏」"],
-    },
-    "ACGD": {
-        "name": "こだわりの食と歴史を巡る冒険グルマン",
-        "tagline": "「国宝の前で感動し、路地裏の名店で唸る」",
-        "desc": "歴史深いスポットを探訪しつつ、地元の人しか知らない食の名店を発掘するのが生きがい。こだわりと冒険心が同居する旅人です。",
-        "spots": ["国宝 高岡山瑞龍寺", "岩瀬エリア", "新湊きっときと市場"],
-    },
-    "ACGW": {
-        "name": "富山フルコース完全制覇の達人",
-        "tagline": "「朝は美術館、昼は寿司、夜は地酒、全部制覇！」",
-        "desc": "文化施設もグルメスポットも余すところなく巡りたい完璧主義の冒険家。綿密な計画で「全部行く」を実現します。",
-        "spots": ["富山市ガラス美術館", "富岩運河環水公園", "高岡大仏", "新湊きっときと市場"],
-    },
-    "ACED": {
-        "name": "ディープな文化体験アドベンチャラー",
-        "tagline": "「合掌造りの囲炉裏端で、地元のおばあちゃんの話に聴き入る」",
-        "desc": "観光地の表面ではなく、文化の深層に触れたい探究者。工場見学や伝統体験にたっぷり時間をかけます。",
-        "spots": ["五箇山", "富山県美術館", "庄川峡遊覧船"],
-    },
-    "ACEW": {
-        "name": "好奇心全開！フルスロット探検家",
-        "tagline": "「祭りで踊って、トロッコで駆け抜けて、次はどこ？」",
-        "desc": "とにかく「やったことがないこと」に飛びつく好奇心の塊。文化体験もアクティビティも片っ端から挑戦します。",
-        "spots": ["海王丸パーク", "富山城", "黒部峡谷鉄道", "ほたるいかミュージアム"],
-    },
-    "ANGD": {
-        "name": "大自然とグルメの求道者",
-        "tagline": "「雪の大谷を歩き、ます寿しに舌鼓」",
-        "desc": "雄大な自然に挑み、その土地の食に深く向き合う。大自然の冒険と食のこだわりを両立する、贅沢な旅のスタイルです。",
-        "spots": ["立山黒部アルペンルート", "黒部ダム", "新湊きっときと市場"],
-    },
-    "ANGW": {
-        "name": "山も海も食も！弾丸グルメハンター",
-        "tagline": "「黒部峡谷→雨晴海岸→寿司、全部今日中に！」",
-        "desc": "大自然もグルメもスピード勝負で欲張りに回る弾丸トラベラー。体力と食欲が旅の武器です。",
-        "spots": ["黒部峡谷鉄道", "雨晴海岸", "ほたるいかミュージアム", "立山黒部アルペンルート"],
-    },
-    "ANED": {
-        "name": "秘境探訪の孤高の冒険家",
-        "tagline": "「称名滝の水しぶきを浴び、黒部ダムの放水に立ち尽くす」",
-        "desc": "人が少ない秘境や大自然の中で、時間をかけて深い体験をすることに至上の喜びを感じます。",
-        "spots": ["称名滝", "黒部ダム", "立山黒部アルペンルート"],
-    },
-    "ANEW": {
-        "name": "風と波に乗る自由な冒険旅人",
-        "tagline": "「行き先は決めない。面白そうな方へ走る！」",
-        "desc": "予定は未定。自然の中を自由に駆け巡り、たくさんの景色と出会いを集めるノープラン派の冒険家です。",
-        "spots": ["雨晴海岸", "黒部峡谷鉄道", "あさひ舟川「春の四重奏」", "海王丸パーク"],
-    },
+    "SCGD": {"name": "富山じっくり美食の語り部", "tagline": "「老舗の寿司屋のカウンターで、時を忘れて語らう」", "desc": "歴史ある町並みを散策し、上質な食をじっくり堪能するのがあなたのスタイル。急がず焦らず、一つひとつの味と文化に深く向き合う旅を好みます。", "spots": ["岩瀬エリア", "国宝 高岡山瑞龍寺", "新湊きっときと市場"]},
+    "SCGW": {"name": "富山カルチャー×食べ歩きマスター", "tagline": "「午前は美術館、午後は回転寿司、夜は地酒バー」", "desc": "文化もグルメも効率よく制覇するのがあなた流。限られた時間で最大限の「美味しい」と「美しい」を回収します。", "spots": ["富山市ガラス美術館", "富岩運河環水公園", "富山城", "高岡大仏"]},
+    "SCED": {"name": "知的好奇心の温泉学者", "tagline": "「美術館で知を磨き、温泉で心を解き放つ」", "desc": "美術館や博物館で知的好奇心を満たした後は、温泉でゆっくりリフレッシュ。インプットとリラックスのバランスが絶妙な旅人です。", "spots": ["富山県美術館", "宇奈月温泉", "五箇山"]},
+    "SCEW": {"name": "まちあるきカルチャー探検家", "tagline": "「路面電車に揺られて、未知の路地へ飛び込む」", "desc": "街歩きで偶然の出会いを楽しむタイプ。文化イベントや体験プログラムにも積極的に参加し、知らない世界を広く探ります。", "spots": ["富山城", "高岡大仏", "海王丸パーク", "岩瀬エリア"]},
+    "SNGD": {"name": "富山の恵みに浸る至福の旅人", "tagline": "「雨晴海岸で絶景、温泉で極楽、白エビで至福」", "desc": "自然の美しさと温泉の癒し、そして海の幸を心ゆくまで堪能する三拍子の旅。一つの場所でじっくりと富山の恵みに浸ります。", "spots": ["雨晴海岸", "宇奈月温泉", "ほたるいかミュージアム"]},
+    "SNGW": {"name": "絶景ハンターの美食家", "tagline": "「朝は立山の絶景、昼は港町の海の幸」", "desc": "自然の絶景ポイントを効率よく回りながら、行く先々でご当地グルメも欠かさない欲張りスタイル。テンポよく「映え×美味」を巡ります。", "spots": ["雨晴海岸", "新湊きっときと市場", "砺波チューリップ公園", "新湊大橋"]},
+    "SNED": {"name": "大自然と温泉に癒される求道者", "tagline": "「称名滝の轟音を聴きながら、温泉で心を浄化する」", "desc": "壮大な自然と温泉だけがあればいい。人混みを避け、大自然の静寂の中でじっくり自分と向き合う、究極の癒し旅を求めます。", "spots": ["庄川峡遊覧船", "称名滝", "宇奈月温泉"]},
+    "SNEW": {"name": "風まかせの自然派トラベラー", "tagline": "「風の向くまま、山から海へ」", "desc": "計画はほどほどに、自然が美しい場所を気の向くままに巡ります。花畑も海岸も山も、広く浅くではなく「広く美しく」がモットーです。", "spots": ["雨晴海岸", "海王丸パーク", "砺波チューリップ公園", "あさひ舟川「春の四重奏」"]},
+    "ACGD": {"name": "こだわりの食と歴史を巡る冒険グルマン", "tagline": "「国宝の前で感動し、路地裏の名店で唸る」", "desc": "歴史深いスポットを探訪しつつ、地元の人しか知らない食の名店を発掘するのが生きがい。こだわりと冒険心が同居する旅人です。", "spots": ["国宝 高岡山瑞龍寺", "岩瀬エリア", "新湊きっときと市場"]},
+    "ACGW": {"name": "富山フルコース完全制覇の達人", "tagline": "「朝は美術館、昼は寿司、夜は地酒、全部制覇！」", "desc": "文化施設もグルメスポットも余すところなく巡りたい完璧主義の冒険家。綿密な計画で「全部行く」を実現します。", "spots": ["富山市ガラス美術館", "富岩運河環水公園", "高岡大仏", "新湊きっときと市場"]},
+    "ACED": {"name": "ディープな文化体験アドベンチャラー", "tagline": "「合掌造りの囲炉裏端で、地元のおばあちゃんの話に聴き入る」", "desc": "観光地の表面ではなく、文化の深層に触れたい探究者。工場見学や伝統体験にたっぷり時間をかけます。", "spots": ["五箇山", "富山県美術館", "庄川峡遊覧船"]},
+    "ACEW": {"name": "好奇心全開！フルスロット探検家", "tagline": "「祭りで踊って、トロッコで駆け抜けて、次はどこ？」", "desc": "とにかく「やったことがないこと」に飛びつく好奇心の塊。文化体験もアクティビティも片っ端から挑戦します。", "spots": ["海王丸パーク", "富山城", "黒部峡谷鉄道", "ほたるいかミュージアム"]},
+    "ANGD": {"name": "大自然とグルメの求道者", "tagline": "「雪の大谷を歩き、ます寿しに舌鼓」", "desc": "雄大な自然に挑み、その土地の食に深く向き合う。大自然の冒険と食のこだわりを両立する、贅沢な旅のスタイルです。", "spots": ["立山黒部アルペンルート", "黒部ダム", "新湊きっときと市場"]},
+    "ANGW": {"name": "山も海も食も！弾丸グルメハンター", "tagline": "「黒部峡谷→雨晴海岸→寿司、全部今日中に！」", "desc": "大自然もグルメもスピード勝負で欲張りに回る弾丸トラベラー。体力と食欲が旅の武器です。", "spots": ["黒部峡谷鉄道", "雨晴海岸", "ほたるいかミュージアム", "立山黒部アルペンルート"]},
+    "ANED": {"name": "秘境探訪の孤高の冒険家", "tagline": "「称名滝の水しぶきを浴び、黒部ダムの放水に立ち尽くす」", "desc": "人が少ない秘境や大自然の中で、時間をかけて深い体験をすることに至上の喜びを感じます。", "spots": ["称名滝", "黒部ダム", "立山黒部アルペンルート"]},
+    "ANEW": {"name": "風と波に乗る自由な冒険旅人", "tagline": "「行き先は決めない。面白そうな方へ走る！」", "desc": "予定は未定。自然の中を自由に駆け巡り、たくさんの景色と出会いを集めるノープラン派の冒険家です。", "spots": ["雨晴海岸", "黒部峡谷鉄道", "あさひ舟川「春の四重奏」", "海王丸パーク"]},
 }
 
 # ============================================================
-# ユーティリティ関数
+# ユーティリティ
 # ============================================================
 def calc_scores(answers):
     axes = {"SA": 0, "CN": 0, "GE": 0, "DW": 0}
@@ -514,9 +341,8 @@ def page_top():
 def page_quiz():
     idx = st.session_state.q_index
     q = QUESTIONS[idx]
-    progress = (idx) / 20
+    progress = idx / 20
 
-    # プログレス表示
     st.markdown(f"""
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem;">
         <span style="font-size:0.85rem; color:#0091DA; font-weight:700;">Q{idx+1} / 20</span>
@@ -527,7 +353,6 @@ def page_quiz():
     </div>
     """, unsafe_allow_html=True)
 
-    # 質問カード
     st.markdown(f"""
     <div class="question-card">
         <div class="question-text">{q["text"]}</div>
@@ -536,40 +361,41 @@ def page_quiz():
 
     # 左右ラベル
     st.markdown(f"""
-    <div style="display:flex; justify-content:space-between; padding:0 1rem; margin-bottom:-0.5rem;">
+    <div style="display:flex; justify-content:space-between; padding:0 0.5rem; margin-bottom:0.3rem;">
         <span style="font-size:0.78rem; color:#888;">{q["left"]}</span>
         <span style="font-size:0.78rem; color:#888;">{q["right"]}</span>
     </div>
     """, unsafe_allow_html=True)
 
-    # ラジオボタン（CSSで丸ボタン化される）
-    options = ["1", "2", "3", "4", "5"]
+    # 丸ボタン5つ（st.button ベース）
     current_val = st.session_state.answers[idx]
-    default_index = (current_val - 1) if current_val is not None else None
+    sizes = [44, 36, 28, 36, 44]  # px
 
-    st.markdown('<div class="quiz-radio">', unsafe_allow_html=True)
-    if default_index is not None:
-        selected = st.radio(
-            "select", options, index=default_index,
-            horizontal=True, label_visibility="collapsed",
-            key=f"radio_{idx}"
-        )
-    else:
-        selected = st.radio(
-            "select", options, index=None,
-            horizontal=True, label_visibility="collapsed",
-            key=f"radio_{idx}"
-        )
-    st.markdown('</div>', unsafe_allow_html=True)
+    cols = st.columns([1, 1, 1, 1, 1])
+    for i, col in enumerate(cols):
+        val = i + 1
+        size = sizes[i]
+        is_selected = (current_val == val)
+        with col:
+            # 選択済みか未選択かでCSSクラスを切り替え
+            css_class = "circle-btn-selected" if is_selected else "circle-btn-area"
+            st.markdown(f'<div class="{css_class}" style="text-align:center;">', unsafe_allow_html=True)
+            st.markdown(f"""
+            <style>
+            div.{css_class} div[data-testid="stButton"] > button {{
+                width: {size}px !important;
+                height: {size}px !important;
+            }}
+            </style>
+            """, unsafe_allow_html=True)
+            if st.button("ㅤ", key=f"c_{idx}_{val}"):
+                st.session_state.answers[idx] = val
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
 
-    # 回答をセッションに保存
-    if selected is not None:
-        st.session_state.answers[idx] = int(selected)
-        current_val = int(selected)
+    st.markdown("<div style='height:0.8rem'></div>", unsafe_allow_html=True)
 
-    st.markdown("<div style='height:0.5rem'></div>", unsafe_allow_html=True)
-
-    # 「次へ」ボタン（回答済みの場合のみ表示）
+    # 「次へ」ボタン
     if current_val is not None:
         if idx < 19:
             if st.button("次へ →", key="next_btn", type="primary", use_container_width=True):
@@ -586,7 +412,7 @@ def page_quiz():
         </div>
         """, unsafe_allow_html=True)
 
-    # 「戻る」ボタン（2問目以降、グレー）
+    # 「戻る」ボタン
     if idx > 0:
         st.markdown("<div class='back-btn'>", unsafe_allow_html=True)
         if st.button("← 戻る", key="back_btn", use_container_width=True):
@@ -603,10 +429,8 @@ def page_result():
     type_code = determine_type(scores)
     t = TYPES.get(type_code, TYPES["SNGD"])
 
-    # GAS保存
     save_to_gas(answers, scores, type_code)
 
-    # 結果カード
     st.markdown(f"""
     <div class="result-card">
         <h2>あなたの富山旅タイプは…</h2>
@@ -617,7 +441,6 @@ def page_result():
     </div>
     """, unsafe_allow_html=True)
 
-    # 4軸バー
     st.markdown("### あなたの旅スタイル")
     axis_info = [
         ("SA", "🛁 癒し (S)", "🏔️ 冒険 (A)"),
@@ -634,7 +457,6 @@ def page_result():
                 <span>{right_label}</span>
             </div>
             <div class="axis-bar">
-                <div class="axis-bar-fill" style="width:100%; background:linear-gradient(90deg,#E8F4FD,#E8F4FD);"></div>
                 <div class="axis-bar-marker" style="left:{pct}%;"></div>
             </div>
         </div>
@@ -642,7 +464,6 @@ def page_result():
 
     st.markdown("<div style='height:1rem'></div>", unsafe_allow_html=True)
 
-    # おすすめスポット
     st.markdown("### おすすめ観光スポット")
     for spot_name in t["spots"]:
         desc = SPOT_DETAILS.get(spot_name, "")
@@ -653,7 +474,6 @@ def page_result():
         </div>
         """, unsafe_allow_html=True)
 
-    # 統計データ（折りたたみ）
     with st.expander("📈 このタイプの旅行者データ（参考）"):
         st.markdown("""
         <div style="font-size:0.9rem; color:#555; line-height:1.8;">
@@ -671,7 +491,6 @@ def page_result():
 
     st.markdown("<div style='height:1rem'></div>", unsafe_allow_html=True)
 
-    # 全16タイプ一覧（折りたたみ）
     with st.expander("📋 全16タイプ一覧"):
         for code, info in TYPES.items():
             highlight = "border:2px solid #0091DA; background:#E8F4FD;" if code == type_code else ""
@@ -685,7 +504,6 @@ def page_result():
 
     st.markdown("<div style='height:1rem'></div>", unsafe_allow_html=True)
 
-    # ボタン
     col_a, col_b = st.columns(2)
     with col_a:
         if st.button("🔄 もう一度診断する", use_container_width=True):
